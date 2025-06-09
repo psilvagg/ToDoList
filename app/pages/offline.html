@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sem conexão - TaskFlow</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            animation: {
+              "fade-in": "fadeIn 0.5s ease-in-out",
+              "bounce-in": "bounceIn 0.6s ease-out",
+              "pulse-slow": "pulse 3s infinite",
+              "spin-slow": "spin 3s linear infinite",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      @keyframes bounceIn {
+        0% {
+          transform: scale(0.3);
+          opacity: 0;
+        }
+        50% {
+          transform: scale(1.05);
+        }
+        70% {
+          transform: scale(0.9);
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+      .gradient-text {
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .connection-indicator {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #ef4444;
+        position: relative;
+      }
+      .connection-indicator::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: #ef4444;
+        transform: translate(-50%, -50%);
+        animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+      }
+      @keyframes ping {
+        75%,
+        100% {
+          transform: translate(-50%, -50%) scale(2);
+          opacity: 0;
+        }
+      }
+    </style>
+  </head>
+  <body class="h-full bg-gradient-to-br from-gray-950 to-gray-900">
+    <!-- Navigation -->
+    <nav class="bg-gray-900/80 backdrop-blur-sm border-b border-gray-800">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+          <div class="flex items-center">
+            <div class="flex-shrink-0 flex items-center">
+              <div
+                class="h-8 w-8 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center"
+              >
+                <svg
+                  class="h-5 w-5 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  ></path>
+                </svg>
+              </div>
+              <span class="ml-2 text-xl font-bold text-white">TaskFlow</span>
+            </div>
+          </div>
+
+          <div class="flex items-center space-x-4">
+            <!-- Connection Status -->
+            <div class="flex items-center space-x-2">
+              <div class="connection-indicator"></div>
+              <span class="text-red-400 text-sm">Offline</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main
+      class="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8"
+      style="padding-bottom: 5%; margin-top: 2%;" 
+    >
+      <div class="max-w-lg w-full text-center animate-fade-in">
+        <!-- Offline Illustration -->
+        <div class="mb-8">
+          <div class="mx-auto w-64 h-64 relative">
+            <!-- Background Circle -->
+            <div
+              class="absolute inset-0 bg-gradient-to-r from-gray-600/20 to-gray-700/20 rounded-full animate-pulse-slow"
+            ></div>
+
+            <!-- WiFi Off Icon -->
+            <div class="absolute inset-0 flex items-center justify-center">
+              <div class="animate-bounce-in">
+                <svg
+                  class="w-24 h-24 text-gray-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.5"
+                    d="M18.364 5.636l-12.728 12.728m0 0L7.05 16.95m-1.414 1.414L7.05 16.95m11.314-11.314L16.95 7.05M7.05 16.95l9.9-9.9M3.172 8.828a15.062 15.062 0 0117.656 0M6.343 12.1a9.036 9.036 0 0111.314 0m-4.243 4.243a3.01 3.01 0 014.243 0"
+                  ></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Error Message -->
+        <div class="mb-8 animate-fade-in" style="animation-delay: 0.3s">
+          <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">
+            Sem conexão
+          </h1>
+          <p class="text-xl text-gray-300 mb-6">
+            Parece que você está offline. Verifique sua conexão com a internet.
+          </p>
+          <p class="text-gray-400">
+            Algumas funcionalidades podem estar limitadas até que a conexão seja
+            restabelecida.
+          </p>
+        </div>
+
+        <!-- Connection Status -->
+        <div
+          class="mb-8 bg-gray-900 border border-gray-800 rounded-lg p-6 animate-fade-in"
+          style="animation-delay: 0.6s"
+        >
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-semibold text-white">Status da Conexão</h3>
+            <div id="connectionStatus" class="flex items-center space-x-2">
+              <div class="connection-indicator"></div>
+              <span class="text-red-400 text-sm">Desconectado</span>
+            </div>
+          </div>
+          <div class="text-left space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-gray-400">Última sincronização:</span>
+              <span class="text-white" id="lastSync">Nunca</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-gray-400">Dados locais:</span>
+              <span class="text-green-400">Disponíveis</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-gray-400">Modo offline:</span>
+              <span class="text-blue-400">Ativo</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div
+          class="flex flex-col sm:flex-row gap-4 justify-center mb-8 animate-fade-in"
+          style="animation-delay: 0.9s"
+        >
+          <button
+            onclick="checkConnection()"
+            id="retryBtn"
+            class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 flex items-center justify-center space-x-2"
+          >
+            <svg
+              class="h-5 w-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+              ></path>
+            </svg>
+            <span>Tentar Reconectar</span>
+          </button>
+          <button
+            onclick="goOfflineMode()"
+            class="border border-gray-700 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors duration-200 flex items-center justify-center space-x-2"
+          >
+            <svg
+              class="h-5 w-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              ></path>
+            </svg>
+            <span>Modo Offline</span>
+          </button>
+        </div>
+
+        <!-- Offline Features -->
+        <div class="animate-fade-in" style="animation-delay: 1.2s">
+          <div class="bg-gray-900 border border-gray-800 rounded-lg p-6">
+            <h3 class="text-lg font-semibold text-white mb-4 flex items-center">
+              <svg
+                class="h-5 w-5 text-blue-500 mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                ></path>
+              </svg>
+              Funcionalidades Offline
+            </h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+              <div class="flex items-center space-x-2">
+                <svg
+                  class="h-4 w-4 text-green-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"
+                  ></path>
+                </svg>
+                <span class="text-gray-300">Visualizar tarefas</span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <svg
+                  class="h-4 w-4 text-green-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"
+                  ></path>
+                </svg>
+                <span class="text-gray-300">Criar tarefas</span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <svg
+                  class="h-4 w-4 text-green-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"
+                  ></path>
+                </svg>
+                <span class="text-gray-300">Editar tarefas</span>
+              </div>
+              <div class="flex items-center space-x-2"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      let isOnline = navigator.onLine;
+      let retryAttempts = 0;
+      const maxRetryAttempts = 5;
+
+      // Initialize page
+      window.onload = function () {
+        updateConnectionStatus();
+        updateLastSync();
+
+        // Listen for online/offline events
+        window.addEventListener("online", handleOnline);
+        window.addEventListener("offline", handleOffline);
+
+        // Auto-retry connection every 30 seconds
+        setInterval(autoRetry, 30000);
+      };
+
+      // Update connection status display
+      function updateConnectionStatus() {
+        const statusElement = document.getElementById("connectionStatus");
+        const indicator = statusElement.querySelector(".connection-indicator");
+        const text = statusElement.querySelector("span");
+
+        if (isOnline) {
+          indicator.style.background = "#10b981";
+          indicator.style.setProperty("--tw-ring-color", "#10b981");
+          text.textContent = "Conectado";
+          text.className = "text-green-400 text-sm";
+        } else {
+          indicator.style.background = "#ef4444";
+          text.textContent = "Desconectado";
+          text.className = "text-red-400 text-sm";
+        }
+      }
+
+      // Update last sync time
+      function updateLastSync() {
+        const lastSyncElement = document.getElementById("lastSync");
+        const lastSync = localStorage.getItem("lastSync");
+
+        if (lastSync) {
+          const date = new Date(lastSync);
+          lastSyncElement.textContent = date.toLocaleString("pt-BR");
+        } else {
+          lastSyncElement.textContent = "Nunca";
+        }
+      }
+
+      // Handle online event
+      function handleOnline() {
+        isOnline = true;
+        updateConnectionStatus();
+        retryAttempts = 0;
+
+        // Show success notification
+        showNotification(
+          "Conexão restabelecida! Sincronizando dados...",
+          "success"
+        );
+
+        // Simulate sync
+        setTimeout(() => {
+          localStorage.setItem("lastSync", new Date().toISOString());
+          updateLastSync();
+          showNotification("Dados sincronizados com sucesso!", "success");
+        }, 2000);
+      }
+
+      // Handle offline event
+      function handleOffline() {
+        isOnline = false;
+        updateConnectionStatus();
+        showNotification("Conexão perdida. Modo offline ativado.", "warning");
+      }
+
+      // Manual connection check
+      function checkConnection() {
+        const retryBtn = document.getElementById("retryBtn");
+        retryBtn.disabled = true;
+        retryBtn.innerHTML = `
+                <svg class="h-5 w-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                </svg>
+                <span>Verificando...</span>
+            `;
+
+        // Simulate connection check
+        setTimeout(() => {
+          if (navigator.onLine) {
+            isOnline = true;
+            updateConnectionStatus();
+            showNotification("Conexão restabelecida!", "success");
+
+            // Redirect to dashboard if logged in
+            if (localStorage.getItem("isLoggedIn")) {
+              window.location.href = "dashboard.html";
+            } else {
+              window.location.href = "landing.html";
+            }
+          } else {
+            retryAttempts++;
+            showNotification(
+              `Tentativa ${retryAttempts}/${maxRetryAttempts} falhou. Ainda offline.`,
+              "error"
+            );
+          }
+
+          retryBtn.disabled = false;
+          retryBtn.innerHTML = `
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                    </svg>
+                    <span>Tentar Reconectar</span>
+                `;
+        }, 2000);
+      }
+
+      // Auto retry connection
+      function autoRetry() {
+        if (!isOnline && retryAttempts < maxRetryAttempts) {
+          if (navigator.onLine) {
+            handleOnline();
+          }
+        }
+      }
+
+      // Go to offline mode (dashboard with limited functionality)
+      function goOfflineMode() {
+        if (localStorage.getItem("isLoggedIn")) {
+          window.location.href = "dashboard.html";
+        } else {
+          showNotification(
+            "Faça login para acessar o modo offline.",
+            "warning"
+          );
+          window.location.href = "index.html";
+        }
+      }
+
+      // Show notification
+      function showNotification(message, type = "info") {
+        const notification = document.createElement("div");
+        const bgColor =
+          type === "success"
+            ? "bg-green-600"
+            : type === "error"
+            ? "bg-red-600"
+            : type === "warning"
+            ? "bg-yellow-600"
+            : "bg-blue-600";
+
+        notification.className = `fixed top-4 right-4 ${bgColor} text-white px-6 py-3 rounded-lg shadow-lg z-50 transform translate-x-full transition-transform duration-300`;
+        notification.innerHTML = `
+                <div class="flex items-center space-x-2">
+                    <span>${message}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" class="text-white hover:text-gray-200">
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+            `;
+
+        document.body.appendChild(notification);
+
+        // Show notification
+        setTimeout(
+          () => notification.classList.remove("translate-x-full"),
+          100
+        );
+
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+          notification.classList.add("translate-x-full");
+          setTimeout(() => notification.remove(), 300);
+        }, 5000);
+      }
+    </script>
+  </body>
+</html>
