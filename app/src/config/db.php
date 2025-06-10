@@ -1,6 +1,6 @@
 <?php
 $host = 'localhost';
-$db   = 'SAEP_Kanban';
+$db   = 'taskFlow';
 $user = 'root';
 $pass = 'cimatec';
 $charset = 'utf8mb4';

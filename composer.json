@@ -1,0 +1,23 @@
+{
+  "name": "pedro/saep-2025",
+  "description": "Repository for TaskFlow and Saep-2025",
+  "type": "project",
+  "require": {
+    "vlucas/phpdotenv": "*",
+    "ramsey/uuid": "*",
+    "matomo/device-detector": "*",
+    "pragmarx/google2fa": "*",
+    "phpmailer/phpmailer": "*"
+  },
+  "config": {
+    "vendor-dir": "libs"
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Pedro Silva",
+      "email": "pedro.s.araujo291@gmail.com"
+    }
+  ],
+  "minimum-stability": "stable"
+}

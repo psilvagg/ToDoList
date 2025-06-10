@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR" class="h-full">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,11 +21,17 @@
     </script>
     <style>
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
     </style>
 </head>
+
 <body class="h-full bg-gradient-to-br from-gray-950 to-gray-900">
     <div class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-md w-full space-y-8 animate-fade-in">
@@ -37,7 +44,7 @@
                 <h2 class="mt-6 text-3xl font-extrabold text-white">Autenticação 2FA</h2>
                 <p class="mt-2 text-sm text-gray-400">Digite o código de 6 dígitos do seu aplicativo autenticador</p>
             </div>
-            
+
             <form class="mt-8 space-y-6" onsubmit="handleTwoFactor(event)">
                 <div>
                     <label class="block text-sm font-medium text-white mb-4 text-center">Código 2FA</label>
@@ -52,8 +59,8 @@
                 </div>
 
                 <div>
-                    <button type="submit" 
-                            class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 transform hover:scale-105">
+                    <button type="submit"
+                        class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 transform hover:scale-105">
                         Verificar Código
                     </button>
                 </div>
@@ -67,18 +74,17 @@
                     </button>
                 </div>
 
-                <div class="text-center">
+                <!-- <div class="text-center">
                     <a href="index.html" class="font-medium text-blue-400 hover:text-blue-300 transition-colors duration-200">
                         ← Voltar ao login
                     </a>
-                </div>
+                </div> -->
             </form>
 
         </div>
     </div>
 
     <script>
-        // Code input functionality
         function moveToNext(current, index) {
             if (current.value.length === 1 && index < 5) {
                 const inputs = document.querySelectorAll('.code-input');
@@ -93,39 +99,30 @@
             }
         }
 
-        // Handle two factor authentication
-        function handleTwoFactor(event) {
+        // Distribui os caracteres colados entre os inputs
+        function handlePaste(event) {
             event.preventDefault();
+            const paste = (event.clipboardData || window.clipboardData).getData('text');
             const inputs = document.querySelectorAll('.code-input');
-            const code = Array.from(inputs).map(input => input.value).join('');
-
-            if (code.length !== 6) {
-                alert('Por favor, digite o código completo de 6 dígitos.');
-                return;
-            }
-
-            // Simulate 2FA verification
-            localStorage.setItem('isLoggedIn', 'true');
-            alert('Autenticação 2FA realizada com sucesso!');
-            window.location.href = 'dashboard.html';
+            const chars = paste.replace(/\s+/g, '').split('').slice(0, inputs.length);
+            inputs.forEach((input, i) => {
+                input.value = chars[i] || '';
+            });
+            // Foca no último input preenchido
+            const nextIndex = chars.length < inputs.length ? chars.length : inputs.length - 1;
+            inputs[nextIndex].focus();
         }
 
-        // Use backup code
-        function useBackupCode() {
-            const backupCode = prompt('Digite seu código de backup:');
-            if (backupCode && backupCode.length >= 8) {
-                localStorage.setItem('isLoggedIn', 'true');
-                alert('Código de backup aceito!');
-                window.location.href = 'dashboard.html';
-            } else {
-                alert('Código de backup inválido.');
-            }
-        }
-
-        // Focus first input on load
+        // Adiciona o listener de paste a todos os inputs
         window.onload = function() {
-            document.querySelector('.code-input').focus();
-        }
+            const inputs = document.querySelectorAll('.code-input');
+            inputs.forEach(input => {
+                input.addEventListener('paste', handlePaste);
+            });
+            inputs[0].focus();
+        };
     </script>
+
 </body>
+
 </html>

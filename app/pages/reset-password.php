@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="h-full">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cadastro - TaskFlow</title>
+    <title>Nova Senha - TaskFlow</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -12,7 +12,6 @@
           extend: {
             animation: {
               "fade-in": "fadeIn 0.5s ease-in-out",
-              "slide-up": "slideUp 0.3s ease-out",
             },
           },
         },
@@ -26,59 +25,6 @@
         to {
           opacity: 1;
         }
-      }
-      @keyframes slideUp {
-        from {
-          transform: translateY(20px);
-          opacity: 0;
-        }
-        to {
-          transform: translateY(0);
-          opacity: 1;
-        }
-      }
-      .custom-checkbox {
-        appearance: none;
-        -webkit-appearance: none;
-        width: 18px;
-        height: 18px;
-        border: 2px solid #4b5563;
-        border-radius: 4px;
-        background-color: #1f2937;
-        display: inline-block;
-        position: relative;
-        margin-right: 8px;
-        vertical-align: middle;
-        cursor: pointer;
-        transition: all 0.2s ease;
-      }
-
-      .custom-checkbox:checked {
-        background-color: #2563eb;
-        border-color: #2563eb;
-      }
-
-      .custom-checkbox:checked::after {
-        content: "";
-        position: absolute;
-        left: 4px;
-        top: 1px;
-        width: 6px;
-        height: 10px;
-        border: solid white;
-        border-width: 0 2px 2px 0;
-        transform: rotate(45deg);
-      }
-
-      .custom-checkbox:hover {
-        border-color: #6b7280;
-      }
-
-      .custom-checkbox:focus {
-        outline: none;
-        ring: 2px;
-        ring-color: #3b82f6;
-        ring-opacity: 0.5;
       }
     </style>
   </head>
@@ -101,51 +47,21 @@
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="2"
-                d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
+                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
               ></path>
             </svg>
           </div>
-          <h2 class="mt-6 text-3xl font-extrabold text-white">Criar Conta</h2>
-          <p class="mt-2 text-sm text-gray-400">Junte-se ao TaskFlow hoje</p>
+          <h2 class="mt-6 text-3xl font-extrabold text-white">Nova Senha</h2>
+          <p class="mt-2 text-sm text-gray-400">Crie uma nova senha</p>
         </div>
 
-        <form class="mt-8 space-y-6" onsubmit="handleRegister(event)">
+        <form class="mt-8 space-y-6" onsubmit="handleResetPassword(event)">
           <div class="space-y-4">
-            <div>
-              <label
-                for="name"
-                class="block text-sm font-medium text-white mb-2"
-                >Nome Completo</label
-              >
-              <input
-                id="name"
-                name="name"
-                type="text"
-                required
-                class="appearance-none rounded-lg relative block w-full px-3 py-3 border border-gray-700 placeholder-gray-400 text-white bg-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-all duration-200"
-              />
-            </div>
-
-            <div>
-              <label
-                for="email"
-                class="block text-sm font-medium text-white mb-2"
-                >Email</label
-              >
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                class="appearance-none rounded-lg relative block w-full px-3 py-3 border border-gray-700 placeholder-gray-400 text-white bg-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-all duration-200"
-              />
-            </div>
-
             <div>
               <label
                 for="password"
                 class="block text-sm font-medium text-white mb-2"
-                >Senha</label
+                >Nova Senha</label
               >
               <div class="relative">
                 <input
@@ -205,7 +121,7 @@
               <label
                 for="confirmPassword"
                 class="block text-sm font-medium text-white mb-2"
-                >Confirmar Senha</label
+                >Confirmar Nova Senha</label
               >
               <div class="relative">
                 <input
@@ -259,46 +175,23 @@
             </div>
           </div>
 
-          <div class="flex items-center">
-            <input
-              id="terms"
-              name="terms"
-              type="checkbox"
-              required
-              class="custom-checkbox"
-            />
-            <label for="terms" class="block text-sm text-white">
-              Aceito os
-              <a href="#" class="text-blue-400 hover:text-blue-300"
-                >termos de uso</a
-              >
-              e
-              <a href="#" class="text-blue-400 hover:text-blue-300"
-                >política de privacidade</a
-              >
-            </label>
-          </div>
-
           <div>
             <button
               type="submit"
               class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 transform hover:scale-105"
             >
-              Criar Conta
+              Alterar Senha
             </button>
           </div>
 
-          <div class="text-center">
-            <span class="text-sm text-gray-600 dark:text-gray-400"
-              >Já tem uma conta?
-            </span>
+          <!-- <div class="text-center">
             <a
               href="index.html"
               class="font-medium text-blue-400 hover:text-blue-300 transition-colors duration-200"
             >
-              Faça login
+              ← Voltar ao login
             </a>
-          </div>
+          </div> -->
         </form>
       </div>
     </div>
@@ -319,53 +212,6 @@
           eyeIcon.classList.remove("hidden");
           eyeOffIcon.classList.add("hidden");
         }
-      }
-
-      // Handle registration
-      function handleRegister(event) {
-        event.preventDefault();
-        const name = document.getElementById("name").value;
-        const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
-        const confirmPassword =
-          document.getElementById("confirmPassword").value;
-        const terms = document.getElementById("terms").checked;
-
-        // Validation
-        if (!name || !email || !password || !confirmPassword) {
-          alert("Por favor, preencha todos os campos.");
-          return;
-        }
-
-        // Email validation
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-          alert("Por favor, insira um email válido.");
-          return;
-        }
-
-        // Password validation
-        if (password.length < 8) {
-          alert("A senha deve ter pelo menos 8 caracteres.");
-          return;
-        }
-
-        if (password !== confirmPassword) {
-          alert("As senhas não coincidem.");
-          return;
-        }
-
-        if (!terms) {
-          alert("Você deve aceitar os termos de uso.");
-          return;
-        }
-
-        // Store user data
-        localStorage.setItem("userName", name);
-        localStorage.setItem("userEmail", email);
-
-        // Redirect to confirmation
-        window.location.href = "confirm-account.html";
       }
     </script>
   </body>
