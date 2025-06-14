@@ -89,6 +89,17 @@
 </head>
 
 <body class="h-full bg-gradient-to-br from-gray-950 to-gray-900">
+
+  <div id="toast-container" class="fixed top-4 right-4 z-50 space-y-3 max-w-sm w-full"></div>
+
+  <!-- Loading Overlay -->
+  <div id="loading-overlay" class="fixed inset-0 bg-black bg-opacity-30 loading-overlay hidden items-center justify-center z-40">
+    <div class="bg-gray-800 rounded-lg p-6 flex items-center space-x-3">
+      <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
+      <span class="text-white">Processando...</span>
+    </div>
+  </div>
+
   <div
     class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-md w-full space-y-8 animate-fade-in">
@@ -111,7 +122,7 @@
         <p class="mt-2 text-sm text-gray-400">Junte-se ao TaskFlow hoje</p>
       </div>
 
-      <form class="mt-8 space-y-6" action="../src/api/Cadastro.php" method="POST">
+      <form class="mt-8 space-y-6" id="cadastro-form" action="../src/api/Cadastro.php" method="POST">
         <div class="space-y-4">
           <div>
             <label
@@ -288,6 +299,204 @@
         eyeIcon.classList.remove("hidden");
         eyeOffIcon.classList.add("hidden");
       }
+    }
+  </script>
+
+  <script>
+    // Configurações dos tipos de mensagem
+    const messageTypes = {
+      success: {
+        bgColor: 'bg-green-800',
+        borderColor: 'border-green-500',
+        iconColor: 'text-green-400',
+        icon: `<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+               </svg>`
+      },
+      error: {
+        bgColor: 'bg-red-800',
+        borderColor: 'border-red-500',
+        iconColor: 'text-red-400',
+        icon: `<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+               </svg>`
+      },
+      warning: {
+        bgColor: 'bg-orange-800',
+        borderColor: 'border-orange-500',
+        iconColor: 'text-orange-400',
+        icon: `<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16c-.77.833.192 2.5 1.732 2.5z"></path>
+               </svg>`
+      },
+      info: {
+        bgColor: 'bg-blue-800',
+        borderColor: 'border-blue-500',
+        iconColor: 'text-blue-400',
+        icon: `<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+               </svg>`
+      }
+    };
+
+    let toastCounter = 0;
+
+    // Função principal para exibir mensagens do backend
+    function showMessage(response) {
+      // Se a resposta for uma string, tenta fazer parse
+      if (typeof response === 'string') {
+        try {
+          response = JSON.parse(response);
+        } catch (e) {
+          console.error('Erro ao fazer parse da resposta:', e);
+          return;
+        }
+      }
+
+      // Determina o tipo baseado na resposta
+      let type = 'info';
+      if (response.success === true || response.status === 'success') {
+        type = 'success';
+      } else if (response.success === false || response.status === 'error') {
+        type = 'error';
+      } else if (response.status === 'warning') {
+        type = 'warning';
+      }
+
+      // Extrai título e mensagem
+      const title = response.title || response.message || 'Notificação';
+      const message = response.description || response.details || '';
+      const duration = response.duration || 5000;
+
+      showToast(type, title, message, duration);
+    }
+
+    // Função para exibir toast
+    function showToast(type, title, message, duration = 5000) {
+      const toastId = `toast-${++toastCounter}`;
+      const config = messageTypes[type];
+
+      const toast = document.createElement('div');
+      toast.id = toastId;
+      toast.className = `${config.bgColor} ${config.borderColor} border-l-4 rounded-lg shadow-lg p-4 animate-slide-in-right max-w-sm`;
+
+      toast.innerHTML = `
+        <div class="flex items-start">
+          <div class="flex-shrink-0">
+            <div class="${config.iconColor}">
+              ${config.icon}
+            </div>
+          </div>
+          <div class="ml-3 flex-1">
+            <h4 class="text-sm font-semibold text-white">${title}</h4>
+            ${message ? `<p class="text-sm text-gray-300 mt-1">${message}</p>` : ''}
+          </div>
+          <div class="ml-4 flex-shrink-0">
+            <button onclick="removeToast('${toastId}')" class="text-gray-400 hover:text-white transition-colors">
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('toast-container').appendChild(toast);
+
+      // Auto remove
+      setTimeout(() => {
+        removeToast(toastId);
+      }, duration);
+    }
+
+    function removeToast(toastId) {
+      const toast = document.getElementById(toastId);
+      if (toast) {
+        toast.classList.remove('animate-slide-in-right');
+        toast.classList.add('animate-slide-out-right');
+        setTimeout(() => {
+          if (toast.parentNode) {
+            toast.parentNode.removeChild(toast);
+          }
+        }, 300);
+      }
+    }
+
+    // Função para mostrar/esconder loading
+    function showLoading() {
+      document.getElementById('loading-overlay').classList.remove('hidden');
+      document.getElementById('loading-overlay').classList.add('flex');
+    }
+
+    function hideLoading() {
+      document.getElementById('loading-overlay').classList.add('hidden');
+      document.getElementById('loading-overlay').classList.remove('flex');
+    }
+
+    // Função genérica para fazer requisições AJAX
+    async function makeRequest(url, data, method = 'POST') {
+      showLoading();
+
+      try {
+        const formData = new FormData();
+
+        // Adiciona os dados ao FormData
+        for (const key in data) {
+          formData.append(key, data[key]);
+        }
+
+        const response = await fetch(url, {
+          method: method,
+          body: formData
+        });
+
+        const result = await response.json();
+
+        hideLoading();
+        showMessage(result);
+
+        return result;
+
+      } catch (error) {
+        hideLoading();
+        showMessage({
+          success: false,
+          title: 'Erro de Conexão',
+          description: 'Não foi possível conectar com o servidor. Tente novamente.'
+        });
+        console.error('Erro na requisição:', error);
+      }
+    }
+
+    // Event listeners para os formulários
+    document.getElementById('cadastro-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData);
+
+      const result = await makeRequest('../src/api/Cadastro.php', {
+        action: 'cadastro',
+        ...data
+      });
+
+      // Se o cadastro foi bem-sucedido, redireciona após mostrar o toast
+      if (result && result.success) {
+        this.reset();
+
+        // Espera 2 segundos para mostrar o toast antes de redirecionar
+        setTimeout(() => {
+          window.location.href = 'confirm-account.php'; // Altere aqui para o destino real
+        }, 2000);
+      }
+    });
+
+
+    // Função para testar ações específicas
+    async function testarAcao(acao) {
+      await makeRequest('../src/api/Cadastro.php', {
+        action: acao
+      });
     }
   </script>
 </body>

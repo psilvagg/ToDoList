@@ -38,3 +38,23 @@ function detectorDispositivo()
         'model' => $model
     ];
 }
+
+function jsonResponse($success, $title, $description = '', $duration = 5000, $data = [])
+{
+    $response = [
+        'success' => $success,
+        'status' => $success ? 'success' : 'error',
+        'title' => $title,
+        'description' => $description,
+        'duration' => $duration,
+        'timestamp' => date('Y-m-d H:i:s'),
+        'data' => $data
+    ];
+
+    echo json_encode($response, JSON_UNESCAPED_UNICODE);
+    exit;
+
+
+    # Ex
+    # jsonResponse(true, 'Campo Obrigatório', 'O nome é obrigatório.');
+}
