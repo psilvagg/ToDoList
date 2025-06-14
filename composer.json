@@ -4,15 +4,14 @@
   "type": "project",
   "require": {
     "vlucas/phpdotenv": "*",
-    "ramsey/uuid": "*",
-    "matomo/device-detector": "*",
+    "ramsey/uuid": "^4.8",
+    "matomo/device-detector": "^6.4",
     "pragmarx/google2fa": "*",
     "phpmailer/phpmailer": "*"
   },
   "config": {
     "vendor-dir": "libs"
   },
-  "license": "MIT",
   "authors": [
     {
       "name": "Pedro Silva",

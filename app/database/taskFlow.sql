@@ -13,9 +13,9 @@ CREATE TABLE
         emailUsuario VARCHAR(100) UNIQUE NOT NULL,
         senhaUsuario VARCHAR(255) NOT NULL,
         cadastroConfirmado BOOLEAN DEFAULT FALSE,
-        authDoisFatores BOOLEAN DEFAULT FALSE,
+        2fa BOOLEAN DEFAULT FALSE,
         ipCadastro VARCHAR(45) NOT NULL,
-        fotoUsuario VARCHAR(40) NOT NULL,
+        fotoUsuario VARCHAR(40),
         dataHoraCadastro DATETIME DEFAULT CURRENT_TIMESTAMP
     );
 
@@ -41,8 +41,9 @@ CREATE TABLE
         uuidDispositivo CHAR(36) PRIMARY KEY NOT NULL,
         uuidUsuario_FK CHAR(36) NOT NULL,
         ipDispositivo VARCHAR(45) NOT NULL,
-        tipoDispositivo VARCHAR(20) NOT NULL,
+        tipoDispositivo VARCHAR(20) NOT NULL, -- Desktop, Mobile, Tablet etc
         navegadorDispositivo VARCHAR(50) NOT NULL,
+        soDispositivo VARCHAR (50) NOT NULL,
         dispositivoConfirmado BOOLEAN DEFAULT FALSE,
         dataHoraConfirmacao DATETIME DEFAULT CURRENT_TIMESTAMP,
         dataHoraCriacao DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -63,10 +64,10 @@ CREATE TABLE
         FOREIGN KEY (uuidDispositivo_FK) REFERENCES Dispositivos (uuidDispositivo)
     );
 
-DROP TABLE IF EXISTS ChaveRecupercao;
+DROP TABLE IF EXISTS ChaveRecuperacao;
 
 CREATE TABLE
-    IF NOT EXISTS ChaveRecupercao (
+    IF NOT EXISTS ChaveRecuperacao (
         uuidChaveRec CHAR(36) PRIMARY KEY NOT NULL,
         uuidUsuario_FK CHAR(36) NOT NULL,
         chaveRecuperacao VARCHAR(45) NOT NULL,
@@ -86,7 +87,7 @@ CREATE TABLE
         dataHoraAdicao DATETIME DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (uuidUsuario_FK) REFERENCES Usuarios (uuidUsuario),
         FOREIGN KEY (uuidDispositivo_FK) REFERENCES Dispositivos (uuidDispositivo),
-        FOREIGN KEY (uuidChaveRec_FK) REFERENCES ChaveRecupercao (uuidChaveRec)
+        FOREIGN KEY (uuidChaveRec_FK) REFERENCES ChaveRecuperacao (uuidChaveRec)
     );
 
 DROP TABLE IF EXISTS ConfirmarCadastro;
