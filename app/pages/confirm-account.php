@@ -2,7 +2,7 @@
 session_start();
 
 if (empty($_SESSION['email-temp'])) {
-  header("Location: /");
+  header('Location: /');
 }
 
 ?>

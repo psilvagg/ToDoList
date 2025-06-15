@@ -48,13 +48,24 @@ function jsonResponse($success, $title, $description = '', $duration = 5000, $da
         'description' => $description,
         'duration' => $duration,
         'timestamp' => date('Y-m-d H:i:s'),
-        'data' => $data
+        'data' => is_array($data) ? (object)$data : $data
     ];
-
-    echo json_encode($response, JSON_UNESCAPED_UNICODE);
+    header('Content-Type: application/json');
+    echo json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
     exit;
-
-
-    # Ex
     # jsonResponse(true, 'Campo Obrigatório', 'O nome é obrigatório.');
+}
+
+
+function senhaValida($senha)
+{
+    return preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[\w$@]{8,}$/', $senha);
+    # Pelo menos um letra minúscula
+    # Pelo menos um letra maiúscula
+    # Pelo menos um número
+    # Pelo menos 8 caracteres                                   
+}
+
+function salvarLogs($uuidUsuario, $uuidDispositivo, $acaoLog, $descricaoLog) {
+    
 }

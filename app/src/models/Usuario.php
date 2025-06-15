@@ -27,7 +27,7 @@ class Usuario
         $this->ip = $ip;
     }
 
-    public function CadastroUsuario()
+    public function cadastrarUsuario()
     {
         $sql = $this->pdo->prepare("SELECT * FROM Usuarios WHERE emailUsuario = :email");
         $sql->bindValue(':email', $this->emailUsuario);
@@ -37,14 +37,18 @@ class Usuario
             return false;
         }
 
-        $sql = "INSERT INTO Usuarios (uuidUsuario, nomeUsuario, emailUsuario, senhaUsuario, ipCadastro) VALUES (:uuid, :nome, :email, :senha, :ip)";
-        $sql = $this->pdo->prepare($sql);
+        $sql = $this->pdo->prepare("INSERT INTO Usuarios (uuidUsuario, nomeUsuario, emailUsuario, senhaUsuario) VALUES (:uuid, :nome, :email, :senha)");
         $sql->bindValue(':uuid', $this->uuidUsuario);
         $sql->bindValue(':nome', $this->nomeUsuario);
         $sql->bindValue(':email', $this->emailUsuario);
         $sql->bindValue(':senha', $this->senhaUsuario);
-        $sql->bindValue(':ip', $this->ip);
 
         return $sql->execute();
+    }
+
+    public function registrarDispositivo($uuid, $ip, $tipo, $navegador, $so)
+    {
+
+        return true;
     }
 }
