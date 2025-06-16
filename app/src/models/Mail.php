@@ -2,4 +2,6 @@
 
 namespace App\Models;
 
-class Mail {}
+class Mail {
+    
+}

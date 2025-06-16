@@ -20,3 +20,7 @@ try {
 } catch (PDOException $e) {
     die('Erro na conexão: ' . $e->getMessage());
 }
+
+
+echo "<pre>";
+var_dump($_SERVER);
